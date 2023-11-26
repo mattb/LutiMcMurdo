@@ -8,9 +8,11 @@
 import React, { Component } from 'react';
 import { WebView } from 'react-native-webview';
 
+import { Server } from 'react-native';
+
 import type {PropsWithChildren} from 'react';
+import { SafeAreaInsetsContext, SafeAreaView, SafeAreaProvider } from 'react-native-safe-area-context';
 import {
-  SafeAreaView,
   ScrollView,
   StatusBar,
   StyleSheet,
@@ -65,18 +67,22 @@ function App(): JSX.Element {
   };
 
   return (
+    <SafeAreaProvider>
       <MyWeb />
+    </SafeAreaProvider>
   );
 }
 
 class MyWeb extends Component {
   render() {
     return (
-      <WebView
-        source={{ uri: 'https://lifeundertheice.org' }}
-        allowsInlineMediaPlayback={ true }
-        style={{ marginTop: 20 }}
-      />
+      <SafeAreaInsetsContext.Consumer>
+        {(insets) => <WebView
+          source={{ uri: "http://localhost:8080/" }}
+          allowsInlineMediaPlayback={ true }
+          style={{ marginTop: insets.top }}
+        />}
+      </SafeAreaInsetsContext.Consumer>
     );
   }
 }
