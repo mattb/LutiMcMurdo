@@ -2,6 +2,12 @@ PODS:
   - boost (1.76.0)
   - CocoaAsyncSocket (7.6.5)
   - DoubleConversion (1.1.6)
+  - dr-pogodin-react-native-fs (2.21.0-alpha.8):
+    - RCT-Folly (= 2021.07.22.00)
+    - React-Core
+  - dr-pogodin-react-native-static-server (0.9.2):
+    - RCT-Folly (= 2021.07.22.00)
+    - React-Core
   - FBLazyVector (0.72.7)
   - FBReactNativeSpec (0.72.7):
     - RCT-Folly (= 2021.07.22.00)
@@ -498,6 +504,8 @@ PODS:
 DEPENDENCIES:
   - boost (from `../node_modules/react-native/third-party-podspecs/boost.podspec`)
   - DoubleConversion (from `../node_modules/react-native/third-party-podspecs/DoubleConversion.podspec`)
+  - "dr-pogodin-react-native-fs (from `../node_modules/@dr.pogodin/react-native-fs`)"
+  - "dr-pogodin-react-native-static-server (from `../node_modules/@dr.pogodin/react-native-static-server`)"
   - FBLazyVector (from `../node_modules/react-native/Libraries/FBLazyVector`)
   - FBReactNativeSpec (from `../node_modules/react-native/React/FBReactNativeSpec`)
   - Flipper (= 0.182.0)
@@ -586,6 +594,10 @@ EXTERNAL SOURCES:
     :podspec: "../node_modules/react-native/third-party-podspecs/boost.podspec"
   DoubleConversion:
     :podspec: "../node_modules/react-native/third-party-podspecs/DoubleConversion.podspec"
+  dr-pogodin-react-native-fs:
+    :path: "../node_modules/@dr.pogodin/react-native-fs"
+  dr-pogodin-react-native-static-server:
+    :path: "../node_modules/@dr.pogodin/react-native-static-server"
   FBLazyVector:
     :path: "../node_modules/react-native/Libraries/FBLazyVector"
   FBReactNativeSpec:
@@ -670,6 +682,8 @@ SPEC CHECKSUMS:
   boost: 57d2868c099736d80fcd648bf211b4431e51a558
   CocoaAsyncSocket: 065fd1e645c7abab64f7a6a2007a48038fdc6a99
   DoubleConversion: 5189b271737e1565bdce30deb4a08d647e3f5f54
+  dr-pogodin-react-native-fs: b72584bd3fa761f6bd5ed7b1285c7f427fca4a40
+  dr-pogodin-react-native-static-server: c0f397b6998f2aaa0d3d0acd9a5f47f633bd9dd2
   FBLazyVector: 5fbbff1d7734827299274638deb8ba3024f6c597
   FBReactNativeSpec: 638095fe8a01506634d77b260ef8a322019ac671
   Flipper: 6edb735e6c3e332975d1b17956bcc584eccf5818

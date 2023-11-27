@@ -2,8 +2,6 @@
 
 #import <React/RCTBundleURLProvider.h>
 
-#import <LutiMcMurdo-Swift.h>
-
 @implementation AppDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
@@ -13,8 +11,7 @@
   // They will be passed down to the ViewController used by React Native.
   self.initialProps = @{};
   
-  [Server.instance start];
-
+  NSLog(@"Temp root: %@", NSTemporaryDirectory());
   return [super application:application didFinishLaunchingWithOptions:launchOptions];
 }
 
