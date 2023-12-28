@@ -1,11 +1,13 @@
 import React, { Component, useEffect, useState } from 'react';
 import { WebView } from 'react-native-webview';
+import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 
 import Server, { ERROR_LOG_FILE, resolveAssetsPath } from '@dr.pogodin/react-native-static-server';
 
 import type { PropsWithChildren } from 'react';
 import {
   StyleSheet,
+  StatusBar,
   useColorScheme
 } from 'react-native';
 
@@ -73,7 +75,8 @@ url.rewrite-once = ("^/(about|thanks)" => "/index.html")
   }, []);
 
   return (
-    <>
+    <SafeAreaView style={{ flex: 1}} edges={ ['top'] }>
+      <StatusBar hidden={ true } />
       <WebView
         injectedJavaScriptBeforeContentLoaded={`
                 window.onerror = function(message, sourcefile, lineno, colno, error) {
@@ -97,9 +100,8 @@ url.rewrite-once = ("^/(about|thanks)" => "/index.html")
           const { nativeEvent } = syntheticEvent;
           console.warn('WebView error: ', nativeEvent);
         }}
-        style={{ marginTop: 59 }}
       />
-    </>
+    </SafeAreaView>
   );
 }
 
@@ -111,7 +113,9 @@ function App(): JSX.Element {
   };
 
   return (
-    <Luti />
+    <SafeAreaProvider>
+      <Luti />
+    </SafeAreaProvider>
   );
 }
 
