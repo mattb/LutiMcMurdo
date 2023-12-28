@@ -1,0 +1,17 @@
+--- CMakeLists.txt	2023-12-27 20:24:47
++++ node_modules/@dr.pogodin/react-native-static-server/CMakeLists.txt	2023-11-26 17:25:16
+@@ -117,6 +117,7 @@
+ 
+ set(PLUGIN_STATIC
+   PLUGIN_INIT(mod_alias)\n
++  PLUGIN_INIT(mod_setenv)\n
+   PLUGIN_INIT(mod_dirlisting)\n
+   PLUGIN_INIT(mod_h2)\n
+   PLUGIN_INIT(mod_indexfile)\n
+@@ -130,4 +131,4 @@
+ 
+ file(WRITE ${CMAKE_BINARY_DIR}/lighttpd1.4/build/plugin-static.h
+   ${PLUGIN_STATIC}
+-)
+\ No newline at end of file
++)
