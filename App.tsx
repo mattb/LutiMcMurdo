@@ -5,31 +5,19 @@
  * @format
  */
 
-import React, { Component } from 'react';
-import { useEffect, useState } from 'react';
+import React, { Component, useEffect, useState } from 'react';
 import { WebView } from 'react-native-webview';
 
-import Server from '@dr.pogodin/react-native-static-server';
-import {ERROR_LOG_FILE} from '@dr.pogodin/react-native-static-server';
-import {resolveAssetsPath} from '@dr.pogodin/react-native-static-server';
+import Server, { resolveAssetsPath } from '@dr.pogodin/react-native-static-server';
 
-import type {PropsWithChildren} from 'react';
-import { SafeAreaInsetsContext, SafeAreaView, SafeAreaProvider } from 'react-native-safe-area-context';
+import type { PropsWithChildren } from 'react';
 import {
-  ScrollView,
-  StatusBar,
   StyleSheet,
-  Text,
-  useColorScheme,
-  View,
+  useColorScheme
 } from 'react-native';
 
 import {
-  Colors,
-  DebugInstructions,
-  Header,
-  LearnMoreLinks,
-  ReloadInstructions,
+  Colors
 } from 'react-native/Libraries/NewAppScreen';
 
 type SectionProps = PropsWithChildren<{
@@ -89,32 +77,33 @@ $HTTP["url"] =~ "/videos" {
   }, []);
 
   return (
-<>
+    <>
       <WebView
-          injectedJavaScriptBeforeContentLoaded={`
+        injectedJavaScriptBeforeContentLoaded={`
                 window.onerror = function(message, sourcefile, lineno, colno, error) {
                   alert("Message: " + message + " - Source: " + sourcefile + " Line: " + lineno + ":" + colno);
                   return true;
                 };
                 true;
               `}
-          webviewDebuggingEnabled={ true }
-          source={{ uri: origin + "/",
-            headers: {
-              'Access-Control-Allow-Origin': '*',
-            },
-          }}
-          originWhitelist={['*']}
-          allowsInlineMediaPlayback={ true }
-          mediaPlaybackRequiresUserAction={ false }
-          mixedContentMode={ "always" }
-          onError={(syntheticEvent) => {
-              const { nativeEvent } = syntheticEvent;
-              console.warn('WebView error: ', nativeEvent);
-            }}
-          style={{ marginTop: 59 }}
-        />
-</>
+        webviewDebuggingEnabled={true}
+        source={{
+          uri: origin + "/",
+          headers: {
+            'Access-Control-Allow-Origin': '*',
+          },
+        }}
+        originWhitelist={['*']}
+        allowsInlineMediaPlayback={true}
+        mediaPlaybackRequiresUserAction={false}
+        mixedContentMode={"always"}
+        onError={(syntheticEvent) => {
+          const { nativeEvent } = syntheticEvent;
+          console.warn('WebView error: ', nativeEvent);
+        }}
+        style={{ marginTop: 59 }}
+      />
+    </>
   );
 }
 
