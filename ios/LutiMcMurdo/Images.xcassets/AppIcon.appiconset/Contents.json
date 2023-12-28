@@ -36,11 +36,13 @@
       "size" : "60x60"
     },
     {
+      "filename" : "apple-touch-icon.png",
       "idiom" : "iphone",
       "scale" : "3x",
       "size" : "60x60"
     },
     {
+      "filename" : "android-chrome-512x512.png",
       "idiom" : "ios-marketing",
       "scale" : "1x",
       "size" : "1024x1024"

@@ -1,14 +1,7 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- */
-
 import React, { Component, useEffect, useState } from 'react';
 import { WebView } from 'react-native-webview';
 
-import Server, { resolveAssetsPath } from '@dr.pogodin/react-native-static-server';
+import Server, { ERROR_LOG_FILE, resolveAssetsPath } from '@dr.pogodin/react-native-static-server';
 
 import type { PropsWithChildren } from 'react';
 import {
@@ -28,6 +21,7 @@ export default function Webserver() {
   const [origin, setOrigin] = useState('');
 
   useEffect(() => {
+    console.log("ERROR LOG FILE", ERROR_LOG_FILE);
     let server = new Server({
       // See further in the docs how to statically bundle assets into the App,
       // alernatively assets to serve might be created or downloaded during
@@ -41,6 +35,8 @@ $HTTP["url"] =~ "/videos" {
       "Access-Control-Allow-Origin" => "*"
   )
 }
+server.modules += ("mod_rewrite")
+url.rewrite-once = ("^/(about|thanks)" => "/index.html")
       `,
       errorLog: {
         conditionHandling: true,
@@ -88,7 +84,7 @@ $HTTP["url"] =~ "/videos" {
               `}
         webviewDebuggingEnabled={true}
         source={{
-          uri: origin + "/",
+          uri: origin + "/?offline=1",
           headers: {
             'Access-Control-Allow-Origin': '*',
           },

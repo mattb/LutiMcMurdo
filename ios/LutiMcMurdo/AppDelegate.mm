@@ -1,6 +1,7 @@
 #import "AppDelegate.h"
 
 #import <React/RCTBundleURLProvider.h>
+#import "RNSplashScreen.h"
 
 @implementation AppDelegate
 
@@ -12,6 +13,7 @@
   self.initialProps = @{};
   
   NSLog(@"Temp root: %@", NSTemporaryDirectory());
+  //[RNSplashScreen show];
   return [super application:application didFinishLaunchingWithOptions:launchOptions];
 }
 

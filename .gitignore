@@ -1,4 +1,5 @@
 src/videos
+*.sw*
 
 # OSX
 #
