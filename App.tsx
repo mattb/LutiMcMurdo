@@ -1,8 +1,9 @@
-import React, { Component, useEffect, useState } from 'react';
+import React, { Component, useEffect, useState, useRef } from 'react';
 import { WebView } from 'react-native-webview';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 
-import Server, { ERROR_LOG_FILE, resolveAssetsPath } from '@dr.pogodin/react-native-static-server';
+import Server, { ERROR_LOG_FILE } from '@dr.pogodin/react-native-static-server';
+import { AssetUpdater, useAssetPath } from "./AssetUpdater";
 
 import type { PropsWithChildren } from 'react';
 import {
@@ -19,16 +20,15 @@ type SectionProps = PropsWithChildren<{
   title: string;
 }>;
 
-export default function Webserver() {
+function Webserver() {
   const [origin, setOrigin] = useState('');
 
+  const assetPath = useAssetPath();
   useEffect(() => {
     console.log("ERROR LOG FILE", ERROR_LOG_FILE);
+    console.log("SOURCE DIRECTORY", assetPath);
     let server = new Server({
-      // See further in the docs how to statically bundle assets into the App,
-      // alernatively assets to serve might be created or downloaded during
-      // the app's runtime.
-      fileDir: resolveAssetsPath("src"),
+      fileDir: assetPath,
       port: 50050,
       extraConfig: `
 server.modules += ("mod_setenv")
@@ -72,11 +72,11 @@ url.rewrite-once = ("^/(about|thanks)" => "/index.html")
 
       server = undefined;
     }
-  }, []);
+  }, [assetPath]);
 
   return (
-    <SafeAreaView style={{ flex: 1}} edges={ ['top'] }>
-      <StatusBar hidden={ true } />
+    <SafeAreaView style={{ flex: 1 }} edges={['top']}>
+      <StatusBar hidden={true} />
       <WebView
         injectedJavaScriptBeforeContentLoaded={`
                 window.onerror = function(message, sourcefile, lineno, colno, error) {
@@ -119,12 +119,12 @@ function App(): JSX.Element {
   );
 }
 
-class Luti extends Component {
-  render() {
-    return (
+const Luti = () => {
+  return (
+    <AssetUpdater>
       <Webserver />
-    );
-  }
+    </AssetUpdater>
+  );
 }
 
 const styles = StyleSheet.create({
