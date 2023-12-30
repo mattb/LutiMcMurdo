@@ -89,6 +89,7 @@ url.rewrite-once = ("^/(about|thanks)" => "/index.html")
         <StatusBar hidden={true} />
         <WebView
           injectedJavaScriptBeforeContentLoaded={`
+                      document.body.style.userSelect = 'none';
                       window.onerror = function(message, sourcefile, lineno, colno, error) {
                         alert("Message: " + message + " - Source: " + sourcefile + " Line: " + lineno + ":" + colno);
                         return true;
