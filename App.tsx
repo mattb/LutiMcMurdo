@@ -89,7 +89,6 @@ url.rewrite-once = ("^/(about|thanks)" => "/index.html")
         <StatusBar hidden={true} />
         <WebView
           injectedJavaScriptBeforeContentLoaded={`
-                      document.body.style.userSelect = 'none';
                       window.onerror = function(message, sourcefile, lineno, colno, error) {
                         alert("Message: " + message + " - Source: " + sourcefile + " Line: " + lineno + ":" + colno);
                         return true;
@@ -106,7 +105,9 @@ url.rewrite-once = ("^/(about|thanks)" => "/index.html")
           originWhitelist={['*']}
           allowsInlineMediaPlayback={true}
           mediaPlaybackRequiresUserAction={false}
+          textInteractionEnabled={false}
           mixedContentMode={"always"}
+          menuItems={[]}
           onError={(syntheticEvent) => {
             const { nativeEvent } = syntheticEvent;
             console.warn('WebView error: ', nativeEvent);
