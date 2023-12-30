@@ -7,6 +7,7 @@ import {
     //StyleSheet,
     View,
     Text,
+    Settings,
     Button,
 } from 'react-native';
 
@@ -41,6 +42,7 @@ export const AssetUpdater = ({ children }) => {
             setProgress(0.0);
             const unzipPath = await unzip(srcPath, targetPath);
             if (await fileExists(unzipPath + "/asset-manifest.json")) {
+                Settings.set({ admin_mode: 0 });
                 subscription.remove();
                 setIsShowingProgress(false);
                 return unzipPath;
@@ -52,6 +54,9 @@ export const AssetUpdater = ({ children }) => {
     }
 
     const getLatestAssetDirectory = async (): Promise<string> => {
+        if (Settings.get("admin_mode") !== 0) {
+            throw new Error("Admin Mode");
+        }
         const lutiDir = (await readDir(DocumentDirectoryPath))
 
         const last = lutiDir
@@ -79,11 +84,10 @@ export const AssetUpdater = ({ children }) => {
 
     if (assetPath === '') {
         return <View style={{ justifyContent: 'center', flex: 1 }}>
-            <Text>hi</Text>
             <Button onPress={async () => {
                 setAssetPath(await onUpdate())
             }} title="Update" />
-            <Progress.Bar progress={progress} width={200} />
+            {progress > 0.0 ? <Progress.Bar progress={progress} width={200} /> : null}
         </View>;
     } else {
         return <AssetContext.Provider value={assetPath}>
