@@ -88,30 +88,25 @@ url.rewrite-once = ("^/(about|thanks)" => "/index.html")
       <SafeAreaView style={{ flex: 1 }} edges={['top']}>
         <StatusBar hidden={true} />
         <WebView
-          injectedJavaScriptBeforeContentLoaded={`
-                      window.onerror = function(message, sourcefile, lineno, colno, error) {
-                        alert("Message: " + message + " - Source: " + sourcefile + " Line: " + lineno + ":" + colno);
-                        return true;
-                      };
-                      true;
-                    `}
-          webviewDebuggingEnabled={true}
           source={{
             uri: origin + "/?offline=1",
             headers: {
               'Access-Control-Allow-Origin': '*',
             },
           }}
-          originWhitelist={['*']}
-          allowsInlineMediaPlayback={true}
-          mediaPlaybackRequiresUserAction={false}
-          textInteractionEnabled={false}
-          mixedContentMode={"always"}
-          menuItems={[]}
           onError={(syntheticEvent) => {
             const { nativeEvent } = syntheticEvent;
             console.warn('WebView error: ', nativeEvent);
           }}
+          allowsInlineMediaPlayback={true}
+          mediaPlaybackRequiresUserAction={false}
+          menuItems={[]}
+          mixedContentMode={"always"}
+          originWhitelist={['*']}
+          showsHorizontalScrollIndicator={false}
+          showsVerticalScrollIndicator={false}
+          textInteractionEnabled={false}
+          webviewDebuggingEnabled={false}
         />
       </SafeAreaView>
     );
