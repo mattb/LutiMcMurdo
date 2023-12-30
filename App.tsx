@@ -9,6 +9,7 @@ import type { PropsWithChildren } from 'react';
 import {
   StyleSheet,
   StatusBar,
+  Text,
   useColorScheme
 } from 'react-native';
 
@@ -19,6 +20,10 @@ import {
 type SectionProps = PropsWithChildren<{
   title: string;
 }>;
+
+const LoadingScreen = () => {
+  return <Text>Loading...</Text>;
+}
 
 function Webserver() {
   const [origin, setOrigin] = useState('');
@@ -60,11 +65,15 @@ url.rewrite-once = ("^/(about|thanks)" => "/index.html")
       // thus if "undefined" the hook has unmounted while we were doing
       // async operations above, and we don't need to launch
       // the server anymore.
-      if (server) setOrigin(await server.start());
+      if (server) {
+        console.log("SERVER START...");
+        const origin = await server.start();
+        console.log("SERVER STARTED", origin);
+        setOrigin(origin);
+      }
     })();
 
     return () => {
-      console.log("FOO");
       setOrigin('');
 
       // No harm to trigger .stop() even if server has not been launched yet.
@@ -74,35 +83,39 @@ url.rewrite-once = ("^/(about|thanks)" => "/index.html")
     }
   }, [assetPath]);
 
-  return (
-    <SafeAreaView style={{ flex: 1 }} edges={['top']}>
-      <StatusBar hidden={true} />
-      <WebView
-        injectedJavaScriptBeforeContentLoaded={`
-                window.onerror = function(message, sourcefile, lineno, colno, error) {
-                  alert("Message: " + message + " - Source: " + sourcefile + " Line: " + lineno + ":" + colno);
-                  return true;
-                };
-                true;
-              `}
-        webviewDebuggingEnabled={true}
-        source={{
-          uri: origin + "/?offline=1",
-          headers: {
-            'Access-Control-Allow-Origin': '*',
-          },
-        }}
-        originWhitelist={['*']}
-        allowsInlineMediaPlayback={true}
-        mediaPlaybackRequiresUserAction={false}
-        mixedContentMode={"always"}
-        onError={(syntheticEvent) => {
-          const { nativeEvent } = syntheticEvent;
-          console.warn('WebView error: ', nativeEvent);
-        }}
-      />
-    </SafeAreaView>
-  );
+  if (origin !== '') {
+    return (
+      <SafeAreaView style={{ flex: 1 }} edges={['top']}>
+        <StatusBar hidden={true} />
+        <WebView
+          injectedJavaScriptBeforeContentLoaded={`
+                      window.onerror = function(message, sourcefile, lineno, colno, error) {
+                        alert("Message: " + message + " - Source: " + sourcefile + " Line: " + lineno + ":" + colno);
+                        return true;
+                      };
+                      true;
+                    `}
+          webviewDebuggingEnabled={true}
+          source={{
+            uri: origin + "/?offline=1",
+            headers: {
+              'Access-Control-Allow-Origin': '*',
+            },
+          }}
+          originWhitelist={['*']}
+          allowsInlineMediaPlayback={true}
+          mediaPlaybackRequiresUserAction={false}
+          mixedContentMode={"always"}
+          onError={(syntheticEvent) => {
+            const { nativeEvent } = syntheticEvent;
+            console.warn('WebView error: ', nativeEvent);
+          }}
+        />
+      </SafeAreaView>
+    );
+  } else {
+    return <LoadingScreen />;
+  }
 }
 
 function App(): JSX.Element {
@@ -121,9 +134,12 @@ function App(): JSX.Element {
 
 const Luti = () => {
   return (
-    <AssetUpdater>
-      <Webserver />
-    </AssetUpdater>
+    <SafeAreaView style={{ flex: 1 }} edges={['top']}>
+      <StatusBar hidden={true} />
+      <AssetUpdater>
+        <Webserver />
+      </AssetUpdater>
+    </SafeAreaView>
   );
 }
 
