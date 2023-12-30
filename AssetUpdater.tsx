@@ -60,9 +60,8 @@ export const AssetUpdater = ({ children }) => {
         const lutiDir = (await readDir(DocumentDirectoryPath))
 
         const last = lutiDir
-            .filter(d => d.isDirectory() && d.name.startsWith("luti-"))
-            .sort(d => d.mtime.getTime())
-            .findLast(i => i.isDirectory() && i.name.startsWith("luti-"));
+            .sort((a, b) => a.name.localeCompare(b.name))
+            .findLast(d => d.isDirectory() && d.name.startsWith("luti-"));
         if (last !== undefined) {
             return last.path;
         }
@@ -75,6 +74,7 @@ export const AssetUpdater = ({ children }) => {
                 let path = await getLatestAssetDirectory();
                 setAssetPath(path);
             } catch (err) {
+                console.log(err);
                 //pass
             }
         };
