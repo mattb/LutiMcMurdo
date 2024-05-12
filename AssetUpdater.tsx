@@ -89,7 +89,8 @@ export const AssetUpdater = ({ children }) => {
     };
 
     const downloadLuti = async (): Promise<string> => {
-      const url = 'https://lifeundertheice.s3.amazonaws.com/mini-luti-2024-05-11T21-14.zip';
+      // const url = 'https://lifeundertheice.s3.amazonaws.com/mini-luti-2024-05-11T21-14.zip';
+      const url = 'https://lifeundertheice.s3.amazonaws.com/tiny-luti-2024-05-12T11-03.zip';
       // const url = 'http://localhost:9000/mini-luti-2024-05-11T21-14.zip';
       const destPath = `${DocumentDirectoryPath}/luti-${Date.now()}`;
 

@@ -4,18 +4,23 @@ import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 
 import Server, { ERROR_LOG_FILE } from '@dr.pogodin/react-native-static-server';
 import { AssetUpdater, useAssetPath } from "./AssetUpdater";
+import RNRestart from 'react-native-restart'; 
 
 import type { PropsWithChildren } from 'react';
 import {
   StyleSheet,
   StatusBar,
   Text,
-  useColorScheme
+  useColorScheme,
+  InteractionManager
 } from 'react-native';
 
 import {
   Colors
 } from 'react-native/Libraries/NewAppScreen';
+
+const TOUCH_TIMEOUT = 10 * 60 * 1000 // 10 minutes;
+// const TOUCH_TIMEOUT = 20000;
 
 type SectionProps = PropsWithChildren<{
   title: string;
@@ -27,8 +32,33 @@ const LoadingScreen = () => {
 
 function Webserver() {
   const [origin, setOrigin] = useState('');
+  const watchDogTimer = useRef(Date.now());
 
   const assetPath = useAssetPath();
+
+  useEffect(() => {
+    const runCallback = () => {
+      InteractionManager.runAfterInteractions(() => {
+        if(Date.now() - watchDogTimer.current > TOUCH_TIMEOUT) {
+          console.log("⏰ UNUSED APP ALARM", Date.now() - watchDogTimer.current);
+          watchDogTimer.current = Date.now();
+          RNRestart.restart();
+          return;
+        }
+        // Schedule the next callback after 10 seconds
+        setTimeout(runCallback, 10000);
+      });
+    };
+
+    // Start the initial callback
+    runCallback();
+
+    // Clean up the interaction on component unmount
+    return () => {
+      InteractionManager.clearInteractionHandle(runCallback);
+    };
+  }, []);
+
   useEffect(() => {
     console.log("ERROR LOG FILE", ERROR_LOG_FILE);
     console.log("SOURCE DIRECTORY", assetPath);
@@ -98,6 +128,8 @@ url.rewrite-once = ("^/(about|thanks)" => "/index.html")
             const { nativeEvent } = syntheticEvent;
             console.warn('WebView error: ', nativeEvent);
           }}
+          pointerEvents="box-none"
+          onTouchStart={ () => watchDogTimer.current = Date.now() }
           allowsInlineMediaPlayback={true}
           mediaPlaybackRequiresUserAction={false}
           menuItems={[]}
