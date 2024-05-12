@@ -14,12 +14,22 @@
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
 		7699B88040F8A987B510C191 /* libPods-LutiMcMurdo-LutiMcMurdoTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 19F6CBCC0A4E27FBF8BF4A61 /* libPods-LutiMcMurdo-LutiMcMurdoTests.a */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
+		D93473542BF1649900019E50 /* LutiMcMurdoUISnapshots.swift in Sources */ = {isa = PBXBuildFile; fileRef = D93473532BF1649900019E50 /* LutiMcMurdoUISnapshots.swift */; };
+		D93473562BF1649900019E50 /* LutiMcMurdoUISnapshotsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D93473552BF1649900019E50 /* LutiMcMurdoUISnapshotsLaunchTests.swift */; };
+		D934735D2BF164A800019E50 /* SnapshotHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = D934735C2BF164A800019E50 /* SnapshotHelper.swift */; };
 		D998735F2B3FA7000037BB7D /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = D998735E2B3FA7000037BB7D /* Settings.bundle */; };
 		D9FA75EE2B140AA400B0CB14 /* src in Resources */ = {isa = PBXBuildFile; fileRef = D9FA75ED2B140AA400B0CB14 /* src */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
 		00E356F41AD99517003FC87E /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 83CBB9F71A601CBA00E9B192 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 13B07F861A680F5B00A75B9A;
+			remoteInfo = LutiMcMurdo;
+		};
+		D93473572BF1649900019E50 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 83CBB9F71A601CBA00E9B192 /* Project object */;
 			proxyType = 1;
@@ -45,6 +55,10 @@
 		5DCACB8F33CDC322A6C60F78 /* libPods-LutiMcMurdo.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-LutiMcMurdo.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = LutiMcMurdo/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		89C6BE57DB24E9ADA2F236DE /* Pods-LutiMcMurdo-LutiMcMurdoTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-LutiMcMurdo-LutiMcMurdoTests.release.xcconfig"; path = "Target Support Files/Pods-LutiMcMurdo-LutiMcMurdoTests/Pods-LutiMcMurdo-LutiMcMurdoTests.release.xcconfig"; sourceTree = "<group>"; };
+		D93473512BF1649900019E50 /* LutiMcMurdoUISnapshots.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = LutiMcMurdoUISnapshots.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		D93473532BF1649900019E50 /* LutiMcMurdoUISnapshots.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LutiMcMurdoUISnapshots.swift; sourceTree = "<group>"; };
+		D93473552BF1649900019E50 /* LutiMcMurdoUISnapshotsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LutiMcMurdoUISnapshotsLaunchTests.swift; sourceTree = "<group>"; };
+		D934735C2BF164A800019E50 /* SnapshotHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SnapshotHelper.swift; sourceTree = "<group>"; };
 		D998735E2B3FA7000037BB7D /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Settings.bundle; sourceTree = "<group>"; };
 		D9FA75EA2B13FFB400B0CB14 /* LutiMcMurdo-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "LutiMcMurdo-Bridging-Header.h"; sourceTree = "<group>"; };
 		D9FA75ED2B140AA400B0CB14 /* src */ = {isa = PBXFileReference; lastKnownFileType = folder; name = src; path = ../src; sourceTree = "<group>"; };
@@ -65,6 +79,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				0C80B921A6F3F58F76C31292 /* libPods-LutiMcMurdo.a in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D934734E2BF1649900019E50 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -122,11 +143,13 @@
 		83CBB9F61A601CBA00E9B192 = {
 			isa = PBXGroup;
 			children = (
+				D934735C2BF164A800019E50 /* SnapshotHelper.swift */,
 				D998735E2B3FA7000037BB7D /* Settings.bundle */,
 				D9FA75ED2B140AA400B0CB14 /* src */,
 				13B07FAE1A68108700A75B9A /* LutiMcMurdo */,
 				832341AE1AAA6A7D00B99B32 /* Libraries */,
 				00E356EF1AD99517003FC87E /* LutiMcMurdoTests */,
+				D93473522BF1649900019E50 /* LutiMcMurdoUISnapshots */,
 				83CBBA001A601CBA00E9B192 /* Products */,
 				2D16E6871FA4F8E400B85C8A /* Frameworks */,
 				BBD78D7AC51CEA395F1C20DB /* Pods */,
@@ -141,6 +164,7 @@
 			children = (
 				13B07F961A680F5B00A75B9A /* LutiMcMurdo.app */,
 				00E356EE1AD99517003FC87E /* LutiMcMurdoTests.xctest */,
+				D93473512BF1649900019E50 /* LutiMcMurdoUISnapshots.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -154,6 +178,15 @@
 				89C6BE57DB24E9ADA2F236DE /* Pods-LutiMcMurdo-LutiMcMurdoTests.release.xcconfig */,
 			);
 			path = Pods;
+			sourceTree = "<group>";
+		};
+		D93473522BF1649900019E50 /* LutiMcMurdoUISnapshots */ = {
+			isa = PBXGroup;
+			children = (
+				D93473532BF1649900019E50 /* LutiMcMurdoUISnapshots.swift */,
+				D93473552BF1649900019E50 /* LutiMcMurdoUISnapshotsLaunchTests.swift */,
+			);
+			path = LutiMcMurdoUISnapshots;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -202,12 +235,31 @@
 			productReference = 13B07F961A680F5B00A75B9A /* LutiMcMurdo.app */;
 			productType = "com.apple.product-type.application";
 		};
+		D93473502BF1649900019E50 /* LutiMcMurdoUISnapshots */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = D93473592BF1649900019E50 /* Build configuration list for PBXNativeTarget "LutiMcMurdoUISnapshots" */;
+			buildPhases = (
+				D934734D2BF1649900019E50 /* Sources */,
+				D934734E2BF1649900019E50 /* Frameworks */,
+				D934734F2BF1649900019E50 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				D93473582BF1649900019E50 /* PBXTargetDependency */,
+			);
+			name = LutiMcMurdoUISnapshots;
+			productName = LutiMcMurdoUISnapshots;
+			productReference = D93473512BF1649900019E50 /* LutiMcMurdoUISnapshots.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
 		83CBB9F71A601CBA00E9B192 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
+				LastSwiftUpdateCheck = 1530;
 				LastUpgradeCheck = 1210;
 				TargetAttributes = {
 					00E356ED1AD99517003FC87E = {
@@ -216,6 +268,10 @@
 					};
 					13B07F861A680F5B00A75B9A = {
 						LastSwiftMigration = 1510;
+					};
+					D93473502BF1649900019E50 = {
+						CreatedOnToolsVersion = 15.3;
+						TestTargetID = 13B07F861A680F5B00A75B9A;
 					};
 				};
 			};
@@ -234,6 +290,7 @@
 			targets = (
 				13B07F861A680F5B00A75B9A /* LutiMcMurdo */,
 				00E356ED1AD99517003FC87E /* LutiMcMurdoTests */,
+				D93473502BF1649900019E50 /* LutiMcMurdoUISnapshots */,
 			);
 		};
 /* End PBXProject section */
@@ -254,6 +311,13 @@
 				D9FA75EE2B140AA400B0CB14 /* src in Resources */,
 				81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D934734F2BF1649900019E50 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -427,6 +491,16 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		D934734D2BF1649900019E50 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				D93473562BF1649900019E50 /* LutiMcMurdoUISnapshotsLaunchTests.swift in Sources */,
+				D93473542BF1649900019E50 /* LutiMcMurdoUISnapshots.swift in Sources */,
+				D934735D2BF164A800019E50 /* SnapshotHelper.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
@@ -434,6 +508,11 @@
 			isa = PBXTargetDependency;
 			target = 13B07F861A680F5B00A75B9A /* LutiMcMurdo */;
 			targetProxy = 00E356F41AD99517003FC87E /* PBXContainerItemProxy */;
+		};
+		D93473582BF1649900019E50 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 13B07F861A680F5B00A75B9A /* LutiMcMurdo */;
+			targetProxy = D93473572BF1649900019E50 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -497,7 +576,7 @@
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = NO;
 				CLANG_ENABLE_MODULES = YES;
 				CURRENT_PROJECT_VERSION = 9;
-				DEVELOPMENT_TEAM = 9AQN75857T;
+				DEVELOPMENT_TEAM = JT4W89SJMJ;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = LutiMcMurdo/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -510,14 +589,14 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.hackdiary.Luti;
+				PRODUCT_BUNDLE_IDENTIFIER = com.arielwaldman.Luti;
 				PRODUCT_NAME = LutiMcMurdo;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
 				SWIFT_OBJC_BRIDGING_HEADER = "LutiMcMurdo-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 2;
 				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = Debug;
@@ -530,7 +609,7 @@
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = NO;
 				CLANG_ENABLE_MODULES = YES;
 				CURRENT_PROJECT_VERSION = 9;
-				DEVELOPMENT_TEAM = 9AQN75857T;
+				DEVELOPMENT_TEAM = JT4W89SJMJ;
 				INFOPLIST_FILE = LutiMcMurdo/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -542,13 +621,13 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.hackdiary.Luti;
+				PRODUCT_BUNDLE_IDENTIFIER = com.arielwaldman.Luti;
 				PRODUCT_NAME = LutiMcMurdo;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
 				SWIFT_OBJC_BRIDGING_HEADER = "LutiMcMurdo-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 2;
 				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = Release;
@@ -701,6 +780,79 @@
 			};
 			name = Release;
 		};
+		D934735A2BF1649900019E50 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = 9AQN75857T;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.4;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MARKETING_VERSION = 1.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = com.hackdiary.LutiMcMurdoUISnapshots;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 2;
+				TEST_TARGET_NAME = LutiMcMurdo;
+			};
+			name = Debug;
+		};
+		D934735B2BF1649900019E50 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_STYLE = Automatic;
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = 9AQN75857T;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.4;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MARKETING_VERSION = 1.0;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = com.hackdiary.LutiMcMurdoUISnapshots;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 2;
+				TEST_TARGET_NAME = LutiMcMurdo;
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -727,6 +879,15 @@
 			buildConfigurations = (
 				83CBBA201A601CBA00E9B192 /* Debug */,
 				83CBBA211A601CBA00E9B192 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		D93473592BF1649900019E50 /* Build configuration list for PBXNativeTarget "LutiMcMurdoUISnapshots" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				D934735A2BF1649900019E50 /* Debug */,
+				D934735B2BF1649900019E50 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
