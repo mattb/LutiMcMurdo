@@ -87,10 +87,10 @@ export const AssetUpdater = ({ children }) => {
         setProgressMessage("");
         throw new Error("Didn't find a LUTI website in zip file");
     };
+    const full_url = 'https://lifeundertheice.s3.amazonaws.com/luti-2024-01-21T13-20.zip';
+    const tiny_url = 'https://lifeundertheice.s3.amazonaws.com/tiny-luti-2024-05-12T11-03.zip';
 
-    const downloadLuti = async (): Promise<string> => {
-      // const url = 'https://lifeundertheice.s3.amazonaws.com/mini-luti-2024-05-11T21-14.zip';
-      const url = 'https://lifeundertheice.s3.amazonaws.com/tiny-luti-2024-05-12T11-03.zip';
+    const downloadLuti = async (url): Promise<string> => {
       // const url = 'http://localhost:9000/mini-luti-2024-05-11T21-14.zip';
       const destPath = `${DocumentDirectoryPath}/luti-${Date.now()}`;
 
@@ -161,10 +161,18 @@ export const AssetUpdater = ({ children }) => {
               <Spacer size={50} vertical />
               <Pressable 
                 onPress={async () => {
-                  setAssetPath(await downloadLuti())
+                  setAssetPath(await downloadLuti(tiny_url))
                 }}
                 style={styles.buttonStyle}>
-                <Text style={styles.buttonTitle}>Download test version</Text>
+                <Text style={styles.buttonTitle}>Download test version (20Mb)</Text>
+              </Pressable>
+              <Spacer size={50} vertical />
+              <Pressable 
+                onPress={async () => {
+                  setAssetPath(await downloadLuti(full_url))
+                }}
+                style={styles.buttonStyle}>
+                <Text style={styles.buttonTitle}>Download full version (3.4Gb)</Text>
               </Pressable>
               <Spacer size={50} vertical />
               {progressMessage !== "" ? <Text style={styles.progressTitle}>{progressMessage}</Text> : null}
