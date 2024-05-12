@@ -2,7 +2,7 @@ PODS:
   - boost (1.83.0)
   - CocoaAsyncSocket (7.6.5)
   - DoubleConversion (1.1.6)
-  - dr-pogodin-react-native-fs (2.22.0-alpha.1):
+  - dr-pogodin-react-native-fs (2.25.0):
     - glog
     - RCT-Folly (= 2022.05.16.00)
     - React-Core
@@ -1362,7 +1362,7 @@ SPEC CHECKSUMS:
   boost: d3f49c53809116a5d38da093a8aa78bf551aed09
   CocoaAsyncSocket: 065fd1e645c7abab64f7a6a2007a48038fdc6a99
   DoubleConversion: fea03f2699887d960129cc54bba7e52542b6f953
-  dr-pogodin-react-native-fs: b3fefe00e4c053b5888e30d604134617c53c8d6a
+  dr-pogodin-react-native-fs: e715efb8ab1d35e76e2158b44ead21f737e3011e
   dr-pogodin-react-native-static-server: ac8edef2dbc63455541cfcbb4361f930f73134aa
   FBLazyVector: f64d1e2ea739b4d8f7e4740cde18089cd97fe864
   FBReactNativeSpec: 9f2b8b243131565335437dba74923a8d3015e780

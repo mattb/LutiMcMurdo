@@ -10,10 +10,10 @@
     "test": "jest"
   },
   "dependencies": {
-    "@dr.pogodin/react-native-fs": "^2.22.0-alpha.1",
+    "@dr.pogodin/react-native-fs": "^2.25.0",
     "@dr.pogodin/react-native-static-server": "^0.10.1",
     "@types/uuid": "^9.0.7",
-    "metro-react-native-babel-preset": "^0.77.0",
+    "@react-native/babel-preset": "^0.77.0",
     "react": "^18.2.0",
     "react-native": "^0.73.6",
     "react-native-document-picker": "^9.1.0",
