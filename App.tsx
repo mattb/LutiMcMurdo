@@ -37,29 +37,6 @@ function Webserver() {
   const assetPath = useAssetPath();
 
   useEffect(() => {
-    const runCallback = () => {
-      InteractionManager.runAfterInteractions(() => {
-        if(Date.now() - watchDogTimer.current > TOUCH_TIMEOUT) {
-          console.log("⏰ UNUSED APP ALARM", Date.now() - watchDogTimer.current);
-          watchDogTimer.current = Date.now();
-          RNRestart.restart();
-          return;
-        }
-        // Schedule the next callback after 10 seconds
-        setTimeout(runCallback, 10000);
-      });
-    };
-
-    // Start the initial callback
-    runCallback();
-
-    // Clean up the interaction on component unmount
-    return () => {
-      InteractionManager.clearInteractionHandle(runCallback);
-    };
-  }, []);
-
-  useEffect(() => {
     console.log("ERROR LOG FILE", ERROR_LOG_FILE);
     console.log("SOURCE DIRECTORY", assetPath);
     let server = new Server({
@@ -103,13 +80,36 @@ url.rewrite-once = ("^/(about|thanks)" => "/index.html")
       }
     })();
 
+    const runWatchdogTimer = () => {
+      InteractionManager.runAfterInteractions(() => {
+        if(Date.now() - watchDogTimer.current > TOUCH_TIMEOUT) {
+          console.log("⏰ UNUSED APP ALARM", Date.now() - watchDogTimer.current);
+          watchDogTimer.current = Date.now();
+          console.log("SERVER STOPPING FOR RESTART... ");
+          // No harm to trigger .stop() even if server has not been launched yet.
+          server.stop().then(() => {
+            console.log("... SERVER STOPPED FOR RESTART"); 
+            server = undefined;
+            RNRestart.restart();
+          });
+          return;
+        }
+        // Schedule the next callback after 10 seconds
+        setTimeout(runWatchdogTimer, 10000);
+      });
+    };
+    runWatchdogTimer();
+
     return () => {
+      InteractionManager.clearInteractionHandle(runWatchdogTimer);
       setOrigin('');
 
+      console.log("SERVER STOPPING FOR UNMOUNT");
       // No harm to trigger .stop() even if server has not been launched yet.
-      server.stop();
-
-      server = undefined;
+      server.stop().then(() => {
+        console.log("SERVER STOPPED FOR UNMOUNT"); 
+        server = undefined;
+      });
     }
   }, [assetPath]);
 
