@@ -1364,7 +1364,7 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon/yoga"
 
 SPEC CHECKSUMS:
-  boost: d3f49c53809116a5d38da093a8aa78bf551aed09
+  boost: 26fad476bfa736552bbfa698a06cc530475c1505
   CocoaAsyncSocket: 065fd1e645c7abab64f7a6a2007a48038fdc6a99
   DoubleConversion: fea03f2699887d960129cc54bba7e52542b6f953
   dr-pogodin-react-native-fs: e715efb8ab1d35e76e2158b44ead21f737e3011e
@@ -1437,6 +1437,6 @@ SPEC CHECKSUMS:
   Swifter: e71dd674404923d7f03ebb03f3f222d1c570bc8e
   Yoga: 805bf71192903b20fc14babe48080582fee65a80
 
-PODFILE CHECKSUM: 7f64ce020ad454adb62a938657893b4fcbaa5ea3
+PODFILE CHECKSUM: 5ca21616dbe52d5edddf19cc6ee9d76eedd6922d
 
-COCOAPODS: 1.14.3
+COCOAPODS: 1.15.2
