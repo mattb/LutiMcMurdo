@@ -1,4 +1,4 @@
-import { DocumentDirectoryPath, downloadFile, exists as fileExists, readDir } from '@dr.pogodin/react-native-fs';
+import { MainBundlePath, DocumentDirectoryPath, downloadFile, exists as fileExists, readDir } from '@dr.pogodin/react-native-fs';
 import { createContext, useContext, useEffect, useState } from 'react';
 import {
   Pressable,
@@ -148,9 +148,16 @@ export const AssetUpdater = ({ children }) => {
   };
 
   const getLatestAssetDirectory = async (): Promise<string> => {
+    if (Settings.get("admin_mode") === undefined) { // first run
+      const localZip = `file://${MainBundlePath}/tiny-luti-2024-05-12T11-03.zip`;
+      console.log("Unzipping", localZip);
+      return await unzipLuti(localZip);
+    }
+
     if (Settings.get("admin_mode") !== 0) {
       throw new Error("Admin Mode");
     }
+
     const lutiDir = (await readDir(DocumentDirectoryPath))
 
     const last = lutiDir
@@ -159,6 +166,7 @@ export const AssetUpdater = ({ children }) => {
     if (last !== undefined) {
       return last.path;
     }
+
     throw new Error("No LUTI dirs available");
   };
 
