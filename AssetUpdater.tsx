@@ -96,7 +96,7 @@ export const AssetUpdater = ({ children }) => {
     setProgressMessage("");
     throw new Error("Didn't find a LUTI website in zip file");
   };
-  const full_url = 'https://lifeundertheice.s3.amazonaws.com/luti-2024-01-21T13-20.zip';
+  const full_url = 'https://lifeundertheice.s3.amazonaws.com/luti-2024-06-19T20-47.zip';
   const tiny_url = 'https://lifeundertheice.s3.amazonaws.com/tiny-luti-2024-05-12T11-03.zip';
 
   const downloadLuti = async (url): Promise<string> => {
