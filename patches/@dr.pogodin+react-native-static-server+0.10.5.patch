@@ -1,7 +1,14 @@
 diff --git a/node_modules/@dr.pogodin/react-native-static-server/CMakeLists.txt b/node_modules/@dr.pogodin/react-native-static-server/CMakeLists.txt
-index 3457df2..5984c4c 100644
+index 3457df2..839f20d 100644
 --- a/node_modules/@dr.pogodin/react-native-static-server/CMakeLists.txt
 +++ b/node_modules/@dr.pogodin/react-native-static-server/CMakeLists.txt
+@@ -1,5 +1,5 @@
+-project(rn-static-server C)
+ cmake_minimum_required(VERSION 3.22.1 FATAL_ERROR)
++project(rn-static-server C)
+ 
+ # This prevents CMake from complaining that INSTALL(..) directives in
+ # Lighttpd CMakeLists.txt miss BUNDLE DESTINATION.
 @@ -117,6 +117,7 @@ add_subdirectory(lighttpd1.4)
  
  set(PLUGIN_STATIC
@@ -10,3 +17,16 @@ index 3457df2..5984c4c 100644
    PLUGIN_INIT(mod_dirlisting)\n
    PLUGIN_INIT(mod_h2)\n
    PLUGIN_INIT(mod_indexfile)\n
+diff --git a/node_modules/@dr.pogodin/react-native-static-server/pcre2/CMakeLists.txt b/node_modules/@dr.pogodin/react-native-static-server/pcre2/CMakeLists.txt
+index cec7dfb..4ac020d 100644
+--- a/node_modules/@dr.pogodin/react-native-static-server/pcre2/CMakeLists.txt
++++ b/node_modules/@dr.pogodin/react-native-static-server/pcre2/CMakeLists.txt
+@@ -103,7 +103,7 @@
+ 
+ # Increased minimum to 2.8.5 to support GNUInstallDirs.
+ # Increased minimum to 3.1 to support imported targets.
+-CMAKE_MINIMUM_REQUIRED(VERSION 3.1)
++CMAKE_MINIMUM_REQUIRED(VERSION 3.5)
+ PROJECT(PCRE2 C)
+ 
+ # Set policy CMP0026 to avoid warnings for the use of LOCATION in

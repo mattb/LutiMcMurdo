@@ -2,6 +2,10 @@ PODS:
   - boost (1.83.0)
   - CocoaAsyncSocket (7.6.5)
   - DoubleConversion (1.1.6)
+  - dr-pogodin-react-native-fs (2.25.0):
+    - glog
+    - RCT-Folly (= 2022.05.16.00)
+    - React-Core
   - dr-pogodin-react-native-static-server (0.10.5):
     - glog
     - RCT-Folly (= 2022.05.16.00)
@@ -1129,10 +1133,6 @@ PODS:
     - React-jsi (= 0.73.11)
     - React-logger (= 0.73.11)
     - React-perflogger (= 0.73.11)
-  - ReactNativeFs (2.37.0):
-    - glog
-    - RCT-Folly (= 2022.05.16.00)
-    - React-Core
   - RNSVG (14.2.0):
     - React-Core
   - RNZipArchive (6.1.2):
@@ -1150,6 +1150,7 @@ PODS:
 DEPENDENCIES:
   - boost (from `../node_modules/react-native/third-party-podspecs/boost.podspec`)
   - DoubleConversion (from `../node_modules/react-native/third-party-podspecs/DoubleConversion.podspec`)
+  - "dr-pogodin-react-native-fs (from `../node_modules/@dr.pogodin/react-native-fs`)"
   - "dr-pogodin-react-native-static-server (from `../node_modules/@dr.pogodin/react-native-static-server`)"
   - FBLazyVector (from `../node_modules/react-native/Libraries/FBLazyVector`)
   - FBReactNativeSpec (from `../node_modules/react-native/React/FBReactNativeSpec`)
@@ -1226,7 +1227,6 @@ DEPENDENCIES:
   - React-runtimescheduler (from `../node_modules/react-native/ReactCommon/react/renderer/runtimescheduler`)
   - React-utils (from `../node_modules/react-native/ReactCommon/react/utils`)
   - ReactCommon/turbomodule/core (from `../node_modules/react-native/ReactCommon`)
-  - "ReactNativeFs (from `../node_modules/@dr.pogodin/react-native-fs`)"
   - RNSVG (from `../node_modules/react-native-svg`)
   - RNZipArchive (from `../node_modules/react-native-zip-archive`)
   - Swifter
@@ -1255,6 +1255,8 @@ EXTERNAL SOURCES:
     :podspec: "../node_modules/react-native/third-party-podspecs/boost.podspec"
   DoubleConversion:
     :podspec: "../node_modules/react-native/third-party-podspecs/DoubleConversion.podspec"
+  dr-pogodin-react-native-fs:
+    :path: "../node_modules/@dr.pogodin/react-native-fs"
   dr-pogodin-react-native-static-server:
     :path: "../node_modules/@dr.pogodin/react-native-static-server"
   FBLazyVector:
@@ -1358,8 +1360,6 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon/react/utils"
   ReactCommon:
     :path: "../node_modules/react-native/ReactCommon"
-  ReactNativeFs:
-    :path: "../node_modules/@dr.pogodin/react-native-fs"
   RNSVG:
     :path: "../node_modules/react-native-svg"
   RNZipArchive:
@@ -1371,6 +1371,7 @@ SPEC CHECKSUMS:
   boost: d3f49c53809116a5d38da093a8aa78bf551aed09
   CocoaAsyncSocket: 065fd1e645c7abab64f7a6a2007a48038fdc6a99
   DoubleConversion: fea03f2699887d960129cc54bba7e52542b6f953
+  dr-pogodin-react-native-fs: f50f6d94f70296f983d61f74eb858c12e1c9f26c
   dr-pogodin-react-native-static-server: dd6b060f5fdfd7717d8dcd59a5c725b15efff406
   FBLazyVector: b46891061bfe0a9b07f601813114c8653a72a45c
   FBReactNativeSpec: 9a01850c21d81027fa7b20b9dcc25d9bfae083da
@@ -1433,7 +1434,6 @@ SPEC CHECKSUMS:
   React-runtimescheduler: 398069b748d97567cc7585cc9a97284ad19d72fa
   React-utils: e8549669b504c18929b2e9aa4d87657e530a91a4
   ReactCommon: 9c38e8797dc2ac72edf63cd18cf450d918575666
-  ReactNativeFs: 22ae1dbd258b263e6bdafb1395972e66a7da0a11
   RNSVG: 043f603fc70d48d289bc3f2ceedbb05ce2636f5c
   RNZipArchive: 29236989a51e92d44e0a5d4c02555426e4e4726c
   SocketRocket: f32cd54efbe0f095c4d7594881e52619cfe80b17
@@ -1441,6 +1441,6 @@ SPEC CHECKSUMS:
   Swifter: e71dd674404923d7f03ebb03f3f222d1c570bc8e
   Yoga: a813a6d82538ccba91c54406404e3ed80b48a692
 
-PODFILE CHECKSUM: aa4632d7e16f8950bed9380fc19f25d1862becba
+PODFILE CHECKSUM: e194ec0184f8313ac509eb5639ffcc3845169890
 
 COCOAPODS: 1.16.2

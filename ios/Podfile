@@ -59,14 +59,34 @@ target 'LutiMcMurdo' do
       :mac_catalyst_enabled => false
     )
 
+    rnziparchive_definitions = %w[
+      $(inherited)
+      HAVE_INTTYPES_H
+      HAVE_PKCRYPT
+      HAVE_STDINT_H
+      HAVE_WZAES
+      HAVE_ZLIB
+      MZ_ZIP_NO_SIGNING
+    ]
+
     installer.pods_project.targets.each do |target|
       next unless target.name == 'RNZipArchive'
+
+      target.build_configurations.each do |build_configuration|
+        definitions = build_configuration.build_settings['GCC_PREPROCESSOR_DEFINITIONS'] || ['$(inherited)']
+        definitions = definitions.split(/\s+/) if definitions.is_a?(String)
+        build_configuration.build_settings['GCC_PREPROCESSOR_DEFINITIONS'] =
+          (definitions + rnziparchive_definitions).uniq
+      end
 
       target.source_build_phase.files.each do |file|
         next unless file.settings && file.settings['COMPILER_FLAGS']
 
         flags = file.settings['COMPILER_FLAGS'].split
-        filtered = flags.reject { |flag| flag.start_with?('-GCC_PREPROCESSOR_DEFINITIONS=') }
+        filtered = flags.reject do |flag|
+          flag.start_with?('-GCC_PREPROCESSOR_DEFINITIONS=') ||
+            rnziparchive_definitions.include?(flag)
+        end
         file.settings['COMPILER_FLAGS'] = filtered.join(' ')
       end
     end
