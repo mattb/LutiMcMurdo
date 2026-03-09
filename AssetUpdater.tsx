@@ -51,6 +51,58 @@ const styles = StyleSheet.create({
 });
 
 const AssetContext = createContext(null);
+const ONE_MB = 1024 * 1024;
+const ETA_SMOOTHING_FACTOR = 0.2;
+const MIN_BYTES_FOR_ETA = 2 * ONE_MB;
+const MIN_ELAPSED_MS_FOR_ETA = 1500;
+const UI_UPDATE_INTERVAL_MS = 1500;
+const DOWNLOAD_SIZES: Record<string, number> = {
+  'https://lifeundertheice.s3.amazonaws.com/luti-2024-06-19T20-47.zip': 3.4 * 1024 * 1024 * 1024,
+  'https://lifeundertheice.s3.amazonaws.com/tiny-luti-2024-05-12T11-03.zip': 20 * 1024 * 1024,
+};
+
+const formatDuration = (milliseconds: number) => {
+  const totalSeconds = Math.max(0, Math.round(milliseconds / 1000));
+  const seconds = totalSeconds % 60;
+  const minutes = Math.floor(totalSeconds / 60) % 60;
+  const hours = Math.floor(totalSeconds / 3600);
+  return `${hours.toString().padStart(2, '0')}:${minutes
+    .toString()
+    .padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+};
+
+const formatMegabytes = (bytes: number) => {
+  return `${(bytes / ONE_MB).toFixed(1)} MB`;
+};
+
+const formatTransferRate = (bytesPerSecond: number) => {
+  if (!Number.isFinite(bytesPerSecond) || bytesPerSecond <= 0) {
+    return null;
+  }
+
+  if (bytesPerSecond >= ONE_MB) {
+    return `${(bytesPerSecond / ONE_MB).toFixed(1)} MB/s`;
+  }
+
+  return `${(bytesPerSecond / 1024).toFixed(0)} KB/s`;
+};
+
+const getExpectedDownloadSize = async (url: string) => {
+  try {
+    const response = await fetch(url, { method: 'HEAD' });
+    const contentLength = response.headers.get('content-length');
+    if (contentLength) {
+      const parsed = Number(contentLength);
+      if (Number.isFinite(parsed) && parsed > 0) {
+        return parsed;
+      }
+    }
+  } catch {
+    // Fall back to bundled size hints if the HEAD request fails.
+  }
+
+  return DOWNLOAD_SIZES[url] ?? null;
+};
 
 export const useAssetPath = () => {
   return useContext(AssetContext);
@@ -61,6 +113,9 @@ export const AssetUpdater = ({ children }) => {
   const [progressMessage, setProgressMessage] = useState("");
   const [assetPath, setAssetPath] = useState('');
   const [estimatedTime, setEstimatedTime] = useState("Calculating...");
+  const [downloadedBytes, setDownloadedBytes] = useState(0);
+  const [totalDownloadBytes, setTotalDownloadBytes] = useState<number | null>(null);
+  const [downloadRate, setDownloadRate] = useState<string | null>(null);
 
   const onUpdate = async (): Promise<string> => {
     const { uri } = await DocumentPicker.pickSingle({
@@ -80,6 +135,9 @@ export const AssetUpdater = ({ children }) => {
     });
     setProgressMessage("Unpacking LUTI from file");
     setProgress(0.0);
+    setDownloadedBytes(0);
+    setTotalDownloadBytes(null);
+    setDownloadRate(null);
 
     if (uri !== null) {
       const srcPath = decodeURI(uri.substring(7));
@@ -105,36 +163,80 @@ export const AssetUpdater = ({ children }) => {
 
     setProgressMessage("Downloading LUTI data");
     setProgress(0.0);
+    setEstimatedTime("Calculating...");
+    setDownloadedBytes(0);
+    setDownloadRate(null);
+    const expectedSize = await getExpectedDownloadSize(url);
+    setTotalDownloadBytes(expectedSize);
     const startTime = Date.now();
-    let estimatedTimes = [];
+    let lastReportedMegabyte = -1;
+    let lastBytesWritten = 0;
+    let lastSampleTime = startTime;
+    let lastUiUpdateTime = 0;
+    let smoothedBytesPerSecond = 0;
     const options = {
       fromUrl: url,
       toFile: destPath,
       background: false,
-      progressDivider: 1,
+      progressDivider: 0,
       progress: (res) => {
-        const progressPercent = (res.bytesWritten / res.contentLength);
+        const totalBytes = expectedSize ?? res.contentLength;
+        const downloadedMegabyte = Math.floor(res.bytesWritten / ONE_MB);
+
+        if (downloadedMegabyte === lastReportedMegabyte && res.bytesWritten < totalBytes) {
+          return;
+        }
+        lastReportedMegabyte = downloadedMegabyte;
+
+        const progressPercent = (res.bytesWritten / totalBytes);
         console.log(`Progress: ${progressPercent.toFixed(2)}%`);
-        // Update your progress state or UI here
-        // https://lifeundertheice.s3.amazonaws.com/mini-luti-2024-05-11T21-14.zip
-        setProgress(progressPercent);
 
         // Calculate estimated remaining time
-        const elapsedTime = Date.now() - startTime;
-        const estimatedTotalTime = elapsedTime / progressPercent;
-        const estimatedRemainingTime = estimatedTotalTime - elapsedTime;
+        const now = Date.now();
+        const elapsedTime = now - startTime;
+        const bytesDelta = res.bytesWritten - lastBytesWritten;
+        const timeDeltaMs = now - lastSampleTime;
 
-        estimatedTimes.push(estimatedRemainingTime);
-        const lastEstimates = estimatedTimes.slice(-5);
+        if (timeDeltaMs > 0 && bytesDelta >= 0) {
+          const instantaneousBytesPerSecond = (bytesDelta / timeDeltaMs) * 1000;
+          smoothedBytesPerSecond = smoothedBytesPerSecond === 0
+            ? instantaneousBytesPerSecond
+            : (smoothedBytesPerSecond * (1 - ETA_SMOOTHING_FACTOR))
+              + (instantaneousBytesPerSecond * ETA_SMOOTHING_FACTOR);
+        }
 
-        if (lastEstimates.length > 0) {
-          let averageEstimatedTime = lastEstimates.reduce((sum, time) => sum + time, 0) / lastEstimates.length;
+        lastBytesWritten = res.bytesWritten;
+        lastSampleTime = now;
 
-          // Format the average estimated time
-          const seconds = Math.floor((averageEstimatedTime / 1000) % 60);
-          const minutes = Math.floor((averageEstimatedTime / 1000 / 60) % 60);
-          const hours = Math.floor((averageEstimatedTime / 1000 / 60 / 60) % 24);
-          setEstimatedTime(`${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`);
+        const shouldShowEta =
+          res.bytesWritten >= totalBytes ||
+          (
+            res.bytesWritten >= MIN_BYTES_FOR_ETA &&
+            elapsedTime >= MIN_ELAPSED_MS_FOR_ETA &&
+            smoothedBytesPerSecond > 0
+          );
+        const nextEstimatedTime = shouldShowEta
+          ? formatDuration((Math.max(0, totalBytes - res.bytesWritten) / smoothedBytesPerSecond) * 1000)
+          : "Calculating...";
+        const nextDownloadRate = formatTransferRate(smoothedBytesPerSecond);
+        const shouldFlushUi = res.bytesWritten >= totalBytes
+          || lastUiUpdateTime === 0
+          || now - lastUiUpdateTime >= UI_UPDATE_INTERVAL_MS;
+
+        if (!shouldFlushUi) {
+          return;
+        }
+
+        lastUiUpdateTime = now;
+        setDownloadedBytes(res.bytesWritten);
+        setTotalDownloadBytes(totalBytes);
+        setProgress(progressPercent);
+        setDownloadRate(nextDownloadRate);
+
+        if (
+          shouldShowEta
+        ) {
+          setEstimatedTime(nextEstimatedTime);
         } else {
           setEstimatedTime("Calculating...");
         }
@@ -143,6 +245,8 @@ export const AssetUpdater = ({ children }) => {
 
     console.log("DOWNLOADING", url);
     return downloadFile(options).promise.then(async res => {
+      setDownloadedBytes(expectedSize ?? res.bytesWritten);
+      setTotalDownloadBytes(expectedSize ?? res.bytesWritten);
       return await unzipLuti("file://" + destPath);
     });
   };
@@ -220,6 +324,19 @@ export const AssetUpdater = ({ children }) => {
         {progressMessage !== "" ? (
           <>
             <Progress.Bar progress={progress} width={200} />
+            {progressMessage === "Downloading LUTI data" ? (
+              <>
+                <Spacer size={10} vertical />
+                <Text style={styles.progressTitle}>
+                  {totalDownloadBytes !== null
+                    ? `${formatMegabytes(downloadedBytes)} / ${formatMegabytes(totalDownloadBytes)}`
+                    : formatMegabytes(downloadedBytes)}
+                </Text>
+                {downloadRate ? (
+                  <Text style={styles.progressTitle}>{downloadRate}</Text>
+                ) : null}
+              </>
+            ) : null}
             <Spacer size={10} vertical />
             <Text style={styles.progressTitle}>Estimated time remaining: {estimatedTime}</Text>
           </>
