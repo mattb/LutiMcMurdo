@@ -1,0 +1,12 @@
+diff --git a/node_modules/@dr.pogodin/react-native-static-server/CMakeLists.txt b/node_modules/@dr.pogodin/react-native-static-server/CMakeLists.txt
+index 3457df2..5984c4c 100644
+--- a/node_modules/@dr.pogodin/react-native-static-server/CMakeLists.txt
++++ b/node_modules/@dr.pogodin/react-native-static-server/CMakeLists.txt
+@@ -117,6 +117,7 @@ add_subdirectory(lighttpd1.4)
+ 
+ set(PLUGIN_STATIC
+   PLUGIN_INIT(mod_alias)\n
++  PLUGIN_INIT(mod_setenv)\n
+   PLUGIN_INIT(mod_dirlisting)\n
+   PLUGIN_INIT(mod_h2)\n
+   PLUGIN_INIT(mod_indexfile)\n

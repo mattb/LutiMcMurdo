@@ -5,7 +5,7 @@ require Pod::Executable.execute_command('node', ['-p',
     {paths: [process.argv[1]]},
   )', __dir__]).strip
 
-platform :ios, min_ios_version_supported
+platform :ios, '15.5'
 prepare_react_native_project!
 
 # If you are using a `react-native-flipper` your iOS build will fail when `NO_FLIPPER=1` is set.
@@ -58,6 +58,18 @@ target 'LutiMcMurdo' do
       config[:reactNativePath],
       :mac_catalyst_enabled => false
     )
+
+    installer.pods_project.targets.each do |target|
+      next unless target.name == 'RNZipArchive'
+
+      target.source_build_phase.files.each do |file|
+        next unless file.settings && file.settings['COMPILER_FLAGS']
+
+        flags = file.settings['COMPILER_FLAGS'].split
+        filtered = flags.reject { |flag| flag.start_with?('-GCC_PREPROCESSOR_DEFINITIONS=') }
+        file.settings['COMPILER_FLAGS'] = filtered.join(' ')
+      end
+    end
 
     installer.pods_project.targets.each do |target|
       if target.name == 'Flipper'
