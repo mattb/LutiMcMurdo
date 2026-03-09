@@ -72,7 +72,21 @@ If that manifest exists, the import is accepted. At that point the function also
 
 If the manifest is missing, the function clears the progress message and throws an error saying it did not find a LUTI website in the ZIP file.
 
-The download path layers an ETA on top of this. `downloadLuti()` tracks bytes written versus content length, uses elapsed time to estimate total runtime, derives a remaining time, and averages the last five estimates before formatting the result as `HH:MM:SS`. This is intentionally rough, but it is enough to make the two download buttons feel different in practice: one is a small demo asset, the other is a multi-gigabyte full dataset.
+The download path layers a richer progress model on top of this. `downloadLuti()` now does a small amount of work before the actual transfer starts:
+
+- It tries an HTTP `HEAD` request first so it can read an accurate `Content-Length` from S3.
+- If that fails, it falls back to the content length reported by the native downloader.
+- If even that is unavailable, it falls back to a hard-coded expected size for the known tiny and full dataset URLs.
+
+During the actual transfer, the app still receives native progress events continuously, but it turns them into a calmer UI:
+
+- Progress is tracked in 1 MB increments rather than 1% steps.
+- The UI shows `downloaded MB / total MB`.
+- It also shows a smoothed transfer rate in `KB/s` or `MB/s`.
+- Estimated time remaining is based on a smoothed bytes-per-second rate rather than a short average of raw ETA guesses.
+- The visible React updates are throttled so the display does not twitch excessively on fast connections.
+
+So the current progress screen is still lightweight, but it is significantly more informative and more stable than the original version.
 
 ## 6. The empty-state screen is really an operations screen
 
@@ -106,7 +120,7 @@ Its main `useEffect` creates an instance of `@dr.pogodin/react-native-static-ser
 - `fileDir` points at the selected asset directory.
 - `port` is fixed at `50050`.
 - `stopInBackground` is enabled.
-- `errorLog` turns on a broad set of logging categories.
+- `errorLog` is disabled so the embedded server does not append to a persistent file in app storage.
 - `extraConfig` injects custom Lighttpd configuration.
 
 That extra server config is where the app's website-specific assumptions live.
@@ -131,6 +145,8 @@ Separately, a recurring function scheduled through `InteractionManager.runAfterI
 This makes sense for a museum or exhibition setting. The code is trying to force the experience back to a clean starting point if a visitor abandons the app midway through.
 
 The cleanup function for the effect also stops the server on unmount and clears the `origin` state. So both timeout-based restart and normal component teardown try to leave the embedded server in a clean state.
+
+Separately, `App.tsx` proactively deletes any existing static-server `ERROR_LOG_FILE` on startup. That is defensive cleanup for older builds or debugging sessions that may have left on-disk Lighttpd logs behind.
 
 ## 10. How the `WebView` is configured
 
@@ -174,9 +190,9 @@ That last point matters for understanding priorities. The React Native code is c
 
 ## 12. Why the static-server patch exists
 
-The file `react-native-static-server-setenv.patch` modifies the vendored `@dr.pogodin/react-native-static-server` build so Lighttpd includes `mod_setenv` in its statically linked plugins. Without that, the `extraConfig` block in `Webserver` could not attach the CORS header for `/videos`.
+The app depends on Lighttpd's `mod_setenv` module so it can attach `Access-Control-Allow-Origin: *` on `/videos`. The upstream `@dr.pogodin/react-native-static-server` package did not originally compile that module into its statically linked plugin set, so this app carries a local patch that adds it.
 
-So the patch is not incidental infrastructure. It is part of the app's runtime contract. The local site depends on custom Lighttpd behavior, and this patch is what makes that server behavior available inside the embedded mobile binary.
+That patch is no longer a manually applied repo file. It now lives under `patches/` and is reapplied automatically by `patch-package` during `npm install`. The runtime purpose is the same: without the patch, the `extraConfig` block in `Webserver` could not enable the response-header behavior the embedded site expects.
 
 ## 13. Test coverage and what it implies
 
