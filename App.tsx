@@ -3,6 +3,7 @@ import { WebView } from 'react-native-webview';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 
 import Server, { ERROR_LOG_FILE } from '@dr.pogodin/react-native-static-server';
+import { exists as fileExists, unlink } from '@dr.pogodin/react-native-fs';
 import { AssetUpdater, useAssetPath } from "./AssetUpdater";
 import RNRestart from 'react-native-restart'; 
 
@@ -37,8 +38,6 @@ function Webserver() {
   const assetPath = useAssetPath();
 
   useEffect(() => {
-    console.log("ERROR LOG FILE", ERROR_LOG_FILE);
-    console.log("SOURCE DIRECTORY", assetPath);
     let server = new Server({
       fileDir: assetPath,
       port: 50050,
@@ -52,15 +51,10 @@ $HTTP["url"] =~ "/videos" {
 server.modules += ("mod_rewrite")
 url.rewrite-once = ("^/(about|thanks)" => "/index.html")
       `,
-      errorLog: {
-        conditionHandling: true,
-        fileNotFound: true,
-        requestHandling: true,
-        requestHeader: true,
-        requestHeaderOnError: true,
-        responseHeader: true,
-        timeouts: true,
-      },
+      // Leave file logging disabled in production so Lighttpd does not append
+      // to ERROR_LOG_FILE in app storage. For debugging, restore `errorLog`
+      // with the desired flags temporarily, then purge the file afterward.
+      errorLog: false,
       stopInBackground: true,
     });
     (async () => {
@@ -149,6 +143,22 @@ url.rewrite-once = ("^/(about|thanks)" => "/index.html")
 
 function App(): JSX.Element {
   const isDarkMode = useColorScheme() === 'dark';
+
+  useEffect(() => {
+    const purgeStaticServerLogs = async () => {
+      try {
+        if (await fileExists(ERROR_LOG_FILE)) {
+          await unlink(ERROR_LOG_FILE);
+        }
+      } catch {
+        // Ignore cleanup failures; the app can continue without persisted logs.
+      }
+    };
+
+    purgeStaticServerLogs().catch(() => {
+      // Ignore cleanup failures; the app can continue without persisted logs.
+    });
+  }, []);
 
   const backgroundStyle = {
     backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
