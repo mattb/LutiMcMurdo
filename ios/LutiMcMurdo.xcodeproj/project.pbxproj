@@ -14,6 +14,7 @@
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
 		7699B88040F8A987B510C191 /* libPods-LutiMcMurdo-LutiMcMurdoTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 19F6CBCC0A4E27FBF8BF4A61 /* libPods-LutiMcMurdo-LutiMcMurdoTests.a */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
+		8C6823D221B4FE9437D66F6D /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = CA9A6C55C4EE629645B474CD /* PrivacyInfo.xcprivacy */; };
 		D93473542BF1649900019E50 /* LutiMcMurdoUISnapshots.swift in Sources */ = {isa = PBXBuildFile; fileRef = D93473532BF1649900019E50 /* LutiMcMurdoUISnapshots.swift */; };
 		D93473562BF1649900019E50 /* LutiMcMurdoUISnapshotsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D93473552BF1649900019E50 /* LutiMcMurdoUISnapshotsLaunchTests.swift */; };
 		D934735D2BF164A800019E50 /* SnapshotHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = D934735C2BF164A800019E50 /* SnapshotHelper.swift */; };
@@ -56,6 +57,7 @@
 		5DCACB8F33CDC322A6C60F78 /* libPods-LutiMcMurdo.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-LutiMcMurdo.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = LutiMcMurdo/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		89C6BE57DB24E9ADA2F236DE /* Pods-LutiMcMurdo-LutiMcMurdoTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-LutiMcMurdo-LutiMcMurdoTests.release.xcconfig"; path = "Target Support Files/Pods-LutiMcMurdo-LutiMcMurdoTests/Pods-LutiMcMurdo-LutiMcMurdoTests.release.xcconfig"; sourceTree = "<group>"; };
+		CA9A6C55C4EE629645B474CD /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; includeInIndex = 1; name = PrivacyInfo.xcprivacy; path = LutiMcMurdo/PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		D93473512BF1649900019E50 /* LutiMcMurdoUISnapshots.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = LutiMcMurdoUISnapshots.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		D93473532BF1649900019E50 /* LutiMcMurdoUISnapshots.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LutiMcMurdoUISnapshots.swift; sourceTree = "<group>"; };
 		D93473552BF1649900019E50 /* LutiMcMurdoUISnapshotsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LutiMcMurdoUISnapshotsLaunchTests.swift; sourceTree = "<group>"; };
@@ -121,6 +123,7 @@
 				81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */,
 				13B07FB71A68108700A75B9A /* main.m */,
 				D9FA75EA2B13FFB400B0CB14 /* LutiMcMurdo-Bridging-Header.h */,
+				CA9A6C55C4EE629645B474CD /* PrivacyInfo.xcprivacy */,
 			);
 			name = LutiMcMurdo;
 			sourceTree = "<group>";
@@ -315,6 +318,7 @@
 				D9FA75EE2B140AA400B0CB14 /* src in Resources */,
 				81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
+				8C6823D221B4FE9437D66F6D /* PrivacyInfo.xcprivacy in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
