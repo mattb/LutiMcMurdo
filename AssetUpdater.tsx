@@ -1,4 +1,5 @@
-import { MainBundlePath, DocumentDirectoryPath, downloadFile, exists as fileExists, readDir } from '@dr.pogodin/react-native-fs';
+import { MainBundlePath, DocumentDirectoryPath, downloadFile, exists as fileExists, readDir, unlink } from '@dr.pogodin/react-native-fs';
+import type { ReactNode } from 'react';
 import { createContext, useContext, useEffect, useState } from 'react';
 import {
   Pressable,
@@ -10,7 +11,14 @@ import {
 import DocumentPicker from 'react-native-document-picker';
 import * as Progress from 'react-native-progress';
 import { subscribe, unzip } from 'react-native-zip-archive';
-import Spacer from './Spacer.tsx';
+import Spacer from './Spacer';
+import {
+  isTemporaryDownloadEntry,
+  isTemporaryDownloadPath,
+  resolveStartupAsset,
+  TEMP_DOWNLOAD_PREFIX,
+  type AssetDirectoryEntry,
+} from './assetState';
 
 const styles = StyleSheet.create({
   container: {
@@ -50,7 +58,16 @@ const styles = StyleSheet.create({
   },
 });
 
-const AssetContext = createContext(null);
+type AssetPath = string | null;
+
+type DownloadProgress = {
+  bytesWritten: number;
+  contentLength: number;
+};
+
+const AssetContext = createContext<AssetPath>(null);
+const BOOTSTRAP_COMPLETE_KEY = 'bootstrap_complete';
+const CURRENT_ASSET_PATH_KEY = 'current_asset_path';
 const ONE_MB = 1024 * 1024;
 const ETA_SMOOTHING_FACTOR = 0.2;
 const MIN_BYTES_FOR_ETA = 2 * ONE_MB;
@@ -108,7 +125,7 @@ export const useAssetPath = () => {
   return useContext(AssetContext);
 }
 
-export const AssetUpdater = ({ children }) => {
+export const AssetUpdater = ({ children }: { children: ReactNode }) => {
   const [progress, setProgress] = useState(0.0);
   const [progressMessage, setProgressMessage] = useState("");
   const [assetPath, setAssetPath] = useState('');
@@ -126,7 +143,35 @@ export const AssetUpdater = ({ children }) => {
     return unzipLuti(uri);
   }
 
-  const unzipLuti = async (uri) => {
+  const persistSelectedAsset = (path: string) => {
+    Settings.set({
+      admin_mode: 0,
+      [BOOTSTRAP_COMPLETE_KEY]: true,
+      [CURRENT_ASSET_PATH_KEY]: path,
+    });
+  };
+
+  const readAssetEntries = async (): Promise<AssetDirectoryEntry[]> => {
+    const entries = await readDir(DocumentDirectoryPath);
+    return entries.map(entry => ({
+      isDirectory: entry.isDirectory(),
+      name: entry.name,
+      path: entry.path,
+    }));
+  };
+
+  const cleanupDownloadedArchives = async (entries: AssetDirectoryEntry[]) => {
+    for (const entry of entries) {
+      if (!isTemporaryDownloadEntry(entry)) {
+        continue;
+      }
+      await unlink(entry.path).catch(() => {
+        // Ignore cleanup failures; the app can continue with the selected asset.
+      });
+    }
+  };
+
+  const unzipLuti = async (uri: string) => {
     const subscription = subscribe(function ({
       progress: zipProgress,
       filePath,
@@ -145,7 +190,12 @@ export const AssetUpdater = ({ children }) => {
       setProgress(0.0);
       const unzipPath = await unzip(srcPath, targetPath);
       if (await fileExists(unzipPath + "/asset-manifest.json")) {
-        Settings.set({ admin_mode: 0 });
+        persistSelectedAsset(unzipPath);
+        if (isTemporaryDownloadPath(srcPath, DocumentDirectoryPath)) {
+          await unlink(srcPath).catch(() => {
+            // Ignore cleanup failures; a stale download artifact is not fatal.
+          });
+        }
         subscription.remove();
         return unzipPath;
       }
@@ -157,9 +207,9 @@ export const AssetUpdater = ({ children }) => {
   const full_url = 'https://lifeundertheice.s3.amazonaws.com/luti-2024-06-19T20-47.zip';
   const tiny_url = 'https://lifeundertheice.s3.amazonaws.com/tiny-luti-2024-05-12T11-03.zip';
 
-  const downloadLuti = async (url): Promise<string> => {
+  const downloadLuti = async (url: string): Promise<string> => {
     // const url = 'http://localhost:9000/mini-luti-2024-05-11T21-14.zip';
-    const destPath = `${DocumentDirectoryPath}/luti-${Date.now()}`;
+    const destPath = `${DocumentDirectoryPath}/${TEMP_DOWNLOAD_PREFIX}${Date.now()}.zip`;
 
     setProgressMessage("Downloading LUTI data");
     setProgress(0.0);
@@ -179,7 +229,7 @@ export const AssetUpdater = ({ children }) => {
       toFile: destPath,
       background: false,
       progressDivider: 0,
-      progress: (res) => {
+      progress: (res: DownloadProgress) => {
         const totalBytes = expectedSize ?? res.contentLength;
         const downloadedMegabyte = Math.floor(res.bytesWritten / ONE_MB);
 
@@ -252,23 +302,29 @@ export const AssetUpdater = ({ children }) => {
   };
 
   const getLatestAssetDirectory = async (): Promise<string> => {
-    if (Settings.get("admin_mode") === undefined) { // first run
+    const entries = await readAssetEntries();
+    await cleanupDownloadedArchives(entries);
+
+    const decision = resolveStartupAsset({
+      adminMode: Settings.get("admin_mode"),
+      bootstrapComplete: Settings.get(BOOTSTRAP_COMPLETE_KEY),
+      currentAssetPath: Settings.get(CURRENT_ASSET_PATH_KEY) as string | null | undefined,
+      entries,
+    });
+
+    if (decision.kind === 'bootstrap') {
       const localZip = `file://${MainBundlePath}/tiny-luti-2024-05-12T11-03.zip`;
       console.log("Unzipping", localZip);
       return await unzipLuti(localZip);
     }
 
-    if (Settings.get("admin_mode") !== 0) {
+    if (decision.kind === 'admin') {
       throw new Error("Admin Mode");
     }
 
-    const lutiDir = (await readDir(DocumentDirectoryPath))
-
-    const last = lutiDir
-      .sort((a, b) => a.name.localeCompare(b.name))
-      .findLast(d => d.isDirectory() && d.name.startsWith("luti-"));
-    if (last !== undefined) {
-      return last.path;
+    if (decision.kind === 'use') {
+      persistSelectedAsset(decision.path);
+      return decision.path;
     }
 
     throw new Error("No LUTI dirs available");

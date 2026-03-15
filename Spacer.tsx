@@ -1,15 +1,23 @@
 import React from 'react';
+import type { DimensionValue } from 'react-native';
 import {View} from 'react-native';
 import PropTypes from 'prop-types';
 
-const Spacer = ({horizontal, size}) => {
-  const defaultValue = 'auto';
+type SpacerProps = {
+  horizontal?: boolean;
+  size: DimensionValue;
+  vertical?: boolean;
+};
+
+const Spacer = ({horizontal = false, size, vertical = false}: SpacerProps) => {
+  const defaultValue: DimensionValue = 'auto';
+  const isHorizontal = vertical ? false : horizontal;
 
   return (
     <View
       style={{
-        width: horizontal ? size : defaultValue,
-        height: !horizontal ? size : defaultValue,
+        width: isHorizontal ? size : defaultValue,
+        height: !isHorizontal ? size : defaultValue,
       }}
     />
   );
@@ -21,10 +29,12 @@ Spacer.propTypes = {
     PropTypes.string
   ]).isRequired,
   horizontal: PropTypes.bool,
+  vertical: PropTypes.bool,
 };
 
 Spacer.defaultProps = {
   horizontal: false,
+  vertical: false,
 };
 
 export default Spacer;
